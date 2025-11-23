@@ -1,70 +1,81 @@
-# Project : Streamlined Web Application Deployment using Docker, AWS, Nginx, and
+# Project : Application Deployment on Kubernetes Cluster utilizing EKS, AWS
 
-## Using Docker
+## CRUD Operations
+- Create
+- Read
+- Update
+- Delete
 
-### Application Requirements
-- Source code
-- Runtime (Node.js)
-- Dependencies
+## Project Overview
+This project focuses on deployment of a web application to a Kubernetes cluster using AWS EKS.
 
-> A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another.
+### Key Benefits of Kubernetes
+- Auto Healing
+- Auto Scaling
+- Load Balancing
+- Security
+- Resilience
 
-> It uses a **Container Image** that packages up the complete application.
+## Services Used
+- AWS EC2
+- AWS RDS (MySQL)
+- Docker
+- Docker Hub
+- AWS EKS (Kubernetes)
 
-## Virtual Machines vs Containers
+## Project Workflow
 
-| Feature              | Virtual Machines          | Containers               |
-|----------------------|---------------------------|--------------------------|
-| Startup Time         | Minutes to start          | Seconds to start         |
-| Resource Overhead    | Higher overhead           | Lower overhead           |
-| Portability          | Limited portability       | High portability         |
-| Scalability          | Moderate scaling          | Rapid scaling            |
-| Management           | More complex              | Simplified management    |
-| Performance          | Performance overhead      | Near-native performance  |
-| Maintenance          | Heavy maintenance         | Easy maintenance         |
-| Isolation            | Strong isolation          | Lightweight isolation    |
+### 1. Application Preparation
+- Create EC2 instance and clone the repository
+- Create MySQL database (RDS)
+- Update `app.js` with correct database connection details
+- Build Docker image  
+  ```bash
+  docker build -t ddinuka/crud .
+  ```
+- Test locally  
+  ```bash
+  docker run -p 3000:3000 ddinuka/crud
+  ```
 
-## Setup an EC2 Instance
+### 2. Push Image to Docker Hub
+- Create repository `crud` in Docker Hub
+- Tag and push image  
+  ```bash
+  docker push ddinuka/crud:latest
+  ```
 
-- **OS**: Ubuntu 24.04  
-- **Instance Type**: t2.medium  
+### 3. Create EKS Cluster
+- Create EKS Cluster (Control Plane)
+- Configure VPC, subnets, and cluster access
+- Enable required add-ons (CoreDNS, kube-proxy, AWS VPC CNI)
+- Create Node Group
+  - Instance type: t3.medium
+  - OS: Amazon Linux
+  - Desired nodes: 2
 
-### Steps
+## Kubernetes Architecture Overview
 
-1. Install Docker
-2. Clone git repository  
-   ```bash
-   git clone <repo-url>
-   ```
-3. Build Docker image  
-   ```bash
-   docker build -t wedding-image .
-   ```
-4. List images  
-   ```bash
-   docker images
-   ```
-5. Run container  
-   ```bash
-   docker run -d -p 80:80 wedding-image
-   ```
-6. Check running containers  
-   ```bash
-   docker ps
-   ```
-7. Access application  
-   `http://<public-ip>:80`  
-   Example: `http://142.93.17.12:80`
+### Control Plane (Managed by AWS)
+- kube-apiserver
+- etcd
+- kube-scheduler
+- kube-controller-manager
+- cloud-controller-manager
 
-8. Enter container (optional)  
-   ```bash
-   docker exec -it <container_id> /bin/bash
-   ```
+### Worker Nodes
+- kubelet
+- kube-proxy
+- Container Runtime (via CRI)
 
-9. Stop container  
-   ```bash
-   docker stop <container_id>
-   ```
+### CRI (Container Runtime Interface)
+The interface that allows Kubernetes to use container runtimes (e.g., containerd) to run pods.
 
-**Finished ..!**
-```
+## Final Outcome
+Successfully deployed a Node.js + MySQL CRUD application on AWS EKS with:
+- Dockerized application
+- Image hosted on Docker Hub
+- Fully functional Kubernetes cluster on AWS EKS
+- Auto-scaling, self-healing, and resilient deployment
+
+**Project Status: Completed and Deployed**
