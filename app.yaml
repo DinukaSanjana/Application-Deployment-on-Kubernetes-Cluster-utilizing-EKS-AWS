@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: app
-        image: 00mab/crud:latest
+        image: ddinuka/crud:latest
         ports:
         - containerPort: 3000
